@@ -3,7 +3,7 @@ function Home() {
   return (
     <div className='homePageWrapper'>
       <div className='formWrapper'>
-        <img src='/PRIME-SYNC-BUTTON.jpg' height = "60px" width="60px"></img>
+        <img className='homePageLogo' src='/PRIME-SYNC-BUTTON.jpg' height = "60px" width="60px"></img>
         <h4 className='mainLabel'>Enter Room ID </h4>
         <div className='inputGroup'>
           <input 
