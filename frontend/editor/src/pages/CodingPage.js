@@ -14,7 +14,9 @@ function CodingPage() {
 
 ]);
   return(
+      
 <div className="mainWrap">
+    
   <div className="aside">
       <div className="asideInner">
           <div className="logo">
