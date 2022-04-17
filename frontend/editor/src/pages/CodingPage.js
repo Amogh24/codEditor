@@ -1,7 +1,18 @@
-import React from 'react'
+import {React,useState} from 'react'
 import Client from '../components/Client'
 import Editor from '../components/Editor'
 function CodingPage() {
+    const [clients, setClients] = useState([
+    { 
+        username:"Amogh Sachdeva",
+        socketId:5
+    },
+    { 
+        username:"Akshat Jain",
+        socketId:2
+    }
+
+]);
   return(
 <div className="mainWrap">
   <div className="aside">
@@ -15,12 +26,12 @@ function CodingPage() {
           </div>
           <h3>Connected</h3>
           <div className="clientsList">
-              {/* {clients.map((client) => (
-                  <Client                         Client component uses react avatar which doesn't work for current version of react
+              {clients.map((client) => (
+                  <Client                         
                       key={client.socketId}
                       username={client.username}
                   />
-              ))} */}
+              ))}
           </div>
       </div>
       <button className="btn copyBtn" >
