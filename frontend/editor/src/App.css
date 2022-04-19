@@ -55,7 +55,7 @@
   margin-left: auto;
 }
 
-.joinBtn,.leaveBtn:hover{
+.joinBtn:hover,.leaveBtn:hover{
   background-color: #2b824c;
 }
 
