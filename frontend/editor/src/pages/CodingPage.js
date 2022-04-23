@@ -4,34 +4,55 @@ import ACTIONS from '../Actions'
 import Client from '../components/Client'
 import Editor from '../components/Editor'
 import { initSocket } from '../socket'
-import {useLocation} from 'react-router-dom'
+import {useLocation,useNavigate,Navigate,useParams} from 'react-router-dom'
+import { convertLength } from '@mui/material/styles/cssUtils'
+import toast from 'react-hot-toast'
 function CodingPage() {
+    const [clients, setClients] = useState([]);
 
     const socketRef = useRef(null)
+    const location = useLocation()
+    const {roomId} = useParams()
+    const reactNavigator = useNavigate()
     useEffect(()=>{
+        console.log(location.state.username)
         const init = async()=>{
             socketRef.current = await initSocket()
-        //     socketRef.current.emit(ACTIONS.JOIN,{
-        //         roomId,
-        //         username:location.state?.username
+            socketRef.current.on('connect_error',(err)=>HandleErrors(err))
+            socketRef.current.on('connect_failed',(err)=>HandleErrors(err))
 
-        //     }) //we do this instead of using "join" to prevent errors caused due to typos
-            
-        // 
+            function HandleErrors(err){
+                console.log('socket error',err)
+                toast.error('Socket connection failed, please try again')
+                reactNavigator('/')
+            }
+
+
+
+
+            socketRef.current.emit(ACTIONS.JOIN,{
+                roomId,
+                username:location.state?.username,
+
+            }) //we do this instead of using "join" to prevent errors caused due to typos
+
+            //listening for joined event
+            socketRef.current.on(ACTIONS.JOINED,({clients,username,socketId})=>{
+                if(username!==location.state?.username){
+                    toast.success(`${username} joined the room`)
+                    
+                }
+                setClients(clients)
+            })
+        
     }
         init()
     },[])
-    const [clients, setClients] = useState([
-    { 
-        username:"Amogh Sachdeva",
-        socketId:5
-    },
-    { 
-        username:"Akshat Jain",
-        socketId:2
-    }
 
-]);
+if(!location.state)
+            {
+                return <Navigate to = '/'/>
+            }
   return(
       
 <div className="mainWrap">
