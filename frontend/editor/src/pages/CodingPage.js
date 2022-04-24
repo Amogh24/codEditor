@@ -10,7 +10,8 @@ import toast from 'react-hot-toast'
 function CodingPage() {
     const [clients, setClients] = useState([]);
 
-    const socketRef = useRef(null)
+    const socketRef = useRef(null);
+    const codeRef =useRef(null);
     const location = useLocation()
     const {roomId} = useParams()
     const reactNavigator = useNavigate()
@@ -43,6 +44,10 @@ function CodingPage() {
                     
                 }
                 setClients(clients)
+                socketRef.current.emit(ACTIONS.SYNC_CODE,{
+                    code:codeRef.current,
+                    socketId,
+                });
             });
 
             //listening for disconnected
@@ -62,6 +67,18 @@ function CodingPage() {
         };
     },[])
 
+async function copyRoomId(){
+    try{
+        await navigator.clipboard.writeText(roomId);
+        toast.success("Room Id copied");
+    }catch(err){
+        toast.error("RoomId not copied");
+    }
+}
+
+function leaveRoom(){
+    reactNavigator('/');
+}
 if(!location.state)
             {
                 return <Navigate to = '/'/>
@@ -89,15 +106,15 @@ if(!location.state)
               ))}
           </div>
       </div>
-      <button className="btn copyBtn" >
+      <button className="btn copyBtn" onClick={copyRoomId}>
           Copy ROOM ID
       </button>
-      <button className="btn leaveBtn" >
+      <button className="btn leaveBtn" onClick={leaveRoom} >
           Leave
       </button>
   </div>
   <div className="editorWrap">
-      <Editor socketRef={socketRef} roomId={roomId}/>
+      <Editor socketRef={socketRef} roomId={roomId} onCodeChange={(code)=>{codeRef.current=code;}}/>
   </div>
 </div>
   )
