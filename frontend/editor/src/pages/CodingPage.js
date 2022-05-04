@@ -15,6 +15,7 @@ function CodingPage() {
     const location = useLocation()
     const {roomId} = useParams()
     const reactNavigator = useNavigate()
+
     useEffect(()=>{
         console.log(location.state.username)
         const init = async()=>{
@@ -76,6 +77,16 @@ async function copyRoomId(){
     }
 }
 
+function downloadFile(){
+    const element = document.createElement("a");
+    console.log(codeRef.current);
+    const file = new Blob([codeRef.current], {type: 'text/plain'});
+    element.href = URL.createObjectURL(file);
+    element.download = "myFile.txt";
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+}
+
 function leaveRoom(){
     reactNavigator('/');
 }
@@ -84,7 +95,7 @@ if(!location.state)
                 return <Navigate to = '/'/>
             }
   return(
-      
+
 <div className="mainWrap">
     
   <div className="aside">
@@ -111,6 +122,9 @@ if(!location.state)
       </button>
       <button className="btn leaveBtn" onClick={leaveRoom} >
           Leave
+      </button>
+      <button className="btn leaveBtn" onClick={downloadFile} >
+          DOWNLOAD
       </button>
   </div>
   <div className="editorWrap">
